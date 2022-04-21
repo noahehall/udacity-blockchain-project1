@@ -65,6 +65,9 @@ module.exports = class Blockchain {
    */
   async _addBlock(block) {
     try {
+      const errorStack = await this.validateChain();
+      if (errorStack.length > 0) return new Error(errorStack);
+
       block.height = (await this.getChainHeight()) + 1;
       block.time = this.getTime();
       block.previousBlockHash = await this.getTopBlocksHash();
